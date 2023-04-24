@@ -9,14 +9,15 @@ var events = lines.Select(l =>
     );
 });
 var startDate = events.OrderBy(e => e.StartDate).First().StartDate;
-Enumerable.Range(0, (DateTime.Today - startDate).Days + 2)
+Enumerable.Range(0, (DateTime.Today - startDate).Days + 1)
     .Select(d =>
     {
-        var day = startDate.AddDays(d);
+        var date = startDate.AddDays(d);
+        var day = new DateTime(date.Year, date.Month, date.Day);
         return
         (
             Day: day,
-            Events: events.Count(e => e.StartDate <= day && e.EndDate >= day)
+            Events: events.Count(e => e.StartDate <= day && e.EndDate >= day.AddDays(1))
         );
     })
     .Where(eventDay => eventDay.Events > 0)
